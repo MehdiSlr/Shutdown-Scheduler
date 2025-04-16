@@ -35,9 +35,10 @@ A minimal and modern desktop application to schedule **Shutdown**, **Restart**, 
 
 ## 📝 Requirements
 
-- Python 3.8+
+- [Python 3.8+](https://www.python.org/)
 - [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter)
 - [PyInstaller](https://pyinstaller.org/)
+- [pillow](https://pillow.readthedocs.io/en/stable/)
 
 ---
 
@@ -60,13 +61,22 @@ python main.py
 
 ---
 
-## 🛠 Build Executable (Windows)
+## 🛠 Build Executable
 
-Use [PyInstaller](https://pyinstaller.org/) to create an `.exe`:
+Use [PyInstaller](https://pyinstaller.org/) to create an executable file:
 
-code: bash  
-pyinstaller --onefile --windowed --add-data "assets/icon.ico;assets" --icon=assets/icon.ico main.py  
-exit
+### Windows
+
+
+```bash  
+pyinstaller --onefile --noconsole --hidden-import=pillow --hidden-import=customtkinter --windowed --add-data "assets/icon.ico;assets" --icon=assets/icon.ico main.py
+```
+
+### Linux
+
+```bash
+pyinstaller --onefile --noconsole --hidden-import=customtkinter --windowed --add-data "assets:assets" --icon=assets/icon.ico main.py
+```
 
 ---
 

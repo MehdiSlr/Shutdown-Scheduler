@@ -3,6 +3,7 @@ import sys
 import platform
 import customtkinter as ctk
 from datetime import datetime, timedelta
+from PIL import Image
 
 # Initialize customtkinter
 ctk.set_appearance_mode("System")  # or "Dark", "Light"
@@ -11,15 +12,29 @@ ctk.set_default_color_theme("blue")
 # Create the main window
 app = ctk.CTk()
 app.title("System Shutdown Scheduler")
+app.resizable(False, False)
+app.geometry("350x380")
+
+# Set base path
 if getattr(sys, 'frozen', False):
     base_path = sys._MEIPASS
 else:
     base_path = os.path.abspath(".")
 
-icon_path = os.path.join(base_path, "assets", "icon.ico")
-app.iconbitmap(icon_path)
-app.resizable(False, False)
-app.geometry("350x380")
+assets_path = os.path.join(base_path, "assets")
+ico_path = os.path.join(assets_path, "icon.ico")
+xbm_path = os.path.join(assets_path, "icon.xbm")
+png_path = os.path.join(assets_path, "icon.png")
+
+# Set icon based on platform
+if sys.platform.startswith("win"):
+    app.iconbitmap(ico_path)
+elif sys.platform.startswith("linux"):
+    # Linux does not support .ico files directly, so we convert to .xbm
+    if not os.path.exists(xbm_path):
+        img = Image.open(png_path).convert("1")  # Convert to black and white
+        img.save(xbm_path)
+    app.iconbitmap("@" + xbm_path)
 
 # Font settings
 font_main = ("Segoe UI", 16)
